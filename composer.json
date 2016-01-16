@@ -1,0 +1,22 @@
+{
+    "authors": [
+        {
+            "name": "Stev Leibelt",
+            "email": "artodeto@bazzline.net",
+            "homepage": "https://artodeto.bazzline.net",
+            "role": "Developer"
+        }
+    ],
+    "description": "free as in freedom cli script to send emails",
+    "keywords": ["gpl", "free as in freedom", "php", "cli", "command line", "mail", "console", "email"],
+    "license": "GPLv3",
+    "minimum-stability": "dev",
+    "name": "stevleibelt/php_send_email_via_command_line",
+    "require": {
+        "net_bazzline/php_component_cli_environment": "0.1.2",
+        "net_bazzline/php_component_toolbox": "^1.8",
+        "php": ">=5.3.3",
+        "swiftmailer/swiftmailer": "^5.4"
+    },
+    "type": "library"
+}
