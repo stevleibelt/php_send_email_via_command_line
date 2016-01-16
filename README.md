@@ -34,9 +34,22 @@ Copyright © 2015 Free Software Foundation, Inc.  License GPLv3+: GNU GPL versio
 
 This is free software: you are free to change and redistribute it.  There is NO WARRANTY, to the extent permitted by law.
 
+# Install
+
+## By Hand
+
+    mkdir -p /opt/stevleibelt
+    cd /opt/stevleibelt
+    git clone https://github.com/stevleibelt/php_send_email_via_command_line
+    composer install
+
+# Links
+
+
 # History
 
 * upcomming
     * @todo
+        * create install script that does the steps in the "by hand" section
 * [1.0.0](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.0.0) - released at 16.01.2016
     * initial release
