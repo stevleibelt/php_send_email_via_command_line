@@ -100,7 +100,7 @@ $environment->execute(
 
         if ($hasListOfBlindCarbonCopy) {
             foreach ($listOfBlindCarbonCopy as $blindCarbonCopy)  {
-                $invalidCarbonCopyProvided = (!filter_var($carbonCopy, FILTER_VALIDATE_EMAIL));
+                $invalidCarbonCopyProvided = (!filter_var($blindCarbonCopy, FILTER_VALIDATE_EMAIL));
 
                 if ($invalidCarbonCopyProvided) {
                     throw new InvalidArgumentException(
