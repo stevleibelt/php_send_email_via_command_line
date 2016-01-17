@@ -43,8 +43,11 @@ This is free software: you are free to change and redistribute it.  There is NO 
     git clone https://github.com/stevleibelt/php_send_email_via_command_line
     composer install
 
-# Links
+## With [Packagist](https://packagist.org/packages/stevleibelt/php_send_email_via_command_line)
 
+    composer require stevleibelt/php_send_email_via_command_line
+
+# Links
 
 # History
 
@@ -52,6 +55,8 @@ This is free software: you are free to change and redistribute it.  There is NO 
     * @todo
         * add flag "--add-sender-to-bcc" or "--send-it-to-me-also"
         * create install script that does the steps in the "by hand" section
+* [1.0.1](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.0.1) - released at 17.01.2016
+    * added packagist
     * fixed issue when using optional --bcc
     * made send_mail executable
 * [1.0.0](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.0.0) - released at 16.01.2016
