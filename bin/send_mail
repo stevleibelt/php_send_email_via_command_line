@@ -29,7 +29,6 @@ require_once $pathToAutoloadFile;
 //end of including composer autoload.php
 
 use Net\Bazzline\Component\Cli\Environment\CommandLineEnvironment;
-use SplFileInfo;
 
 $environment    = new CommandLineEnvironment($argv);
 //@todo
