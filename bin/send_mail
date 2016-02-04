@@ -29,6 +29,7 @@ require_once $pathToAutoloadFile;
 //end of including composer autoload.php
 
 use Net\Bazzline\Component\Cli\Environment\CommandLineEnvironment;
+use SplFileInfo;
 
 $environment    = new CommandLineEnvironment($argv);
 //@todo
@@ -164,7 +165,24 @@ $environment->execute(
 
         if ($hasListOfFilesToAttach) {
             foreach ($listOfFilesToAttach as $filePath) {
-                $attachment = Swift_Attachment::fromPath($filePath);
+                $file = new SplFileInfo($filePath);
+
+                switch (strtolower($file->getExtension())) {
+                    case 'jpeg':
+                    case 'jpg':
+                        $contentType = 'image/jpeg';
+                        break;
+                    case 'pdf':
+                        $contentType = 'application/pdf';
+                        break;
+                    default:
+                        $contentType = null;
+                }
+
+                $attachment = Swift_Attachment::fromPath(
+                    $file->getPathname(),
+                    $contentType
+                );
                 $message->attach($attachment);
             }
         }
