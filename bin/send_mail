@@ -35,7 +35,7 @@ $environment    = new CommandLineEnvironment($argv);
 //  add attachment
 //  add --bcc list
 //  add --cc list
-$usage          = basename(__FILE__) . ' "<email address of the sender>" "<email address of the recipient>" "<subject>" "<path/to/the/file.txt|html>" [--bcc="<email address of an blind carbon copy - can be used multiple times>"] [--cc="<email address of a carbon copy - can be used multiple times>"] [-v|--verbose]';
+$usage          = basename(__FILE__) . ' "<email address of the sender>" "<email address of the recipient>" "<subject>" "<path/to/the/file.txt|html>" [--bcc="<email address of an blind carbon copy - can be used multiple times>"] [--cc="<email address of a carbon copy - can be used multiple times>"] [--attachment="path/to/a/file"] [-v|--verbose]';
 
 $environment->execute(
     function (CommandLineEnvironment $environment) {
@@ -43,6 +43,7 @@ $environment->execute(
         $arguments                          = $environment->getArguments();
         $listOfBlindCarbonCopy              = $arguments->getList('bcc');
         $listOfCarbonCopy                   = $arguments->getList('cc');
+        $listOfFilesToAttach                = $arguments->getList('attachment');
         $values                             = $arguments->getValues();
         $invalidNumberOfArgumentsProvided   = (count($values) !== 4);
 
@@ -97,6 +98,7 @@ $environment->execute(
 
         $hasListOfBlindCarbonCopy   = (!is_null($listOfBlindCarbonCopy));
         $hasListOfCarbonCopy        = (!is_null($listOfCarbonCopy));
+        $hasListOfFilesToAttach     = (!is_null($listOfFilesToAttach));
 
         if ($hasListOfBlindCarbonCopy) {
             foreach ($listOfBlindCarbonCopy as $blindCarbonCopy)  {
@@ -117,6 +119,18 @@ $environment->execute(
                 if ($invalidCarbonCopyProvided) {
                     throw new InvalidArgumentException(
                         'invalid carbon copy provided'
+                    );
+                }
+            }
+        }
+
+        if ($hasListOfFilesToAttach) {
+            foreach ($listOfFilesToAttach as $filePath) {
+                $invalidFilePathProvided = (!is_readable($filePath));
+
+                if ($invalidFilePathProvided) {
+                    throw new InvalidArgumentException(
+                        'invalid file path for an attachment provided'
                     );
                 }
             }
@@ -145,6 +159,13 @@ $environment->execute(
         if ($hasListOfCarbonCopy) {
             foreach ($listOfCarbonCopy as $carbonCopy) {
                 $message->addCc($carbonCopy);
+            }
+        }
+
+        if ($hasListOfFilesToAttach) {
+            foreach ($listOfFilesToAttach as $filePath) {
+                $attachment = Swift_Attachment::fromPath($filePath);
+                $message->attach($attachment);
             }
         }
 

@@ -55,9 +55,11 @@ This is free software: you are free to change and redistribute it.  There is NO 
     * @todo
         * add flag "--add-sender-to-bcc" or "--send-it-to-me-also"
         * create install script that does the steps in the "by hand" section
+* [1.1.0](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.1.0) - released at 04.02.2016
+    * added "--attachment"
 * [1.0.1](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.0.1) - released at 17.01.2016
     * added packagist
-    * fixed issue when using optional --bcc
+    * fixed issue when using optional "--bcc"
     * made send_mail executable
 * [1.0.0](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.0.0) - released at 16.01.2016
     * initial release
