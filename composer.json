@@ -17,7 +17,8 @@
         "net_bazzline/php_component_toolbox": "^1.8",
         "php": ">=5.3.3",
         "hoa/file": "1.16.01.15",
-        "hoa/mail": "0.16.01.11"
+        "hoa/mail": "0.16.01.11",
+        "hoa/stream": "1.16.01.14"
     },
     "type": "library"
 }

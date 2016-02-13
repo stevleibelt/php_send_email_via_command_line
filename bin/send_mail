@@ -146,6 +146,12 @@ $environment->execute(
         $environment->outputIfVerbosityIsEnabled(($isHtml ? 'send it as html mail' : 'send it as text mail'));
 
         //@see: http://swiftmailer.org/docs/messages.html
+        \Hoa\Mail\Message::setDefaultTransport(
+            new \Hoa\Mail\Transport\Sendmail(
+                't'
+            )
+        );
+
         $message    = new \Hoa\Mail\Message();
         $message['From']    = $sender;
         $message['To']      = $recipient;
