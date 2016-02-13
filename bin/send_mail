@@ -147,38 +147,36 @@ $environment->execute(
         $environment->outputIfVerbosityIsEnabled(($isHtml ? 'send it as html mail' : 'send it as text mail'));
 
         //@see: http://swiftmailer.org/docs/messages.html
-        $mail       = new PHPMailer();
+        $message    = new \Hoa\Mail\Message();
+        $message['From']    = $sender;
+        $message['To']      = $recipient;
+        $message['Subject'] = $subject;
 
-        $mail->isSendmail();
+        if ($isHtml) {
+            $message->addContent(
+                new \Hoa\Mail\Content\Html($content)
+            );
+        } else {
+            $message->addContent(
+                new \Hoa\Mail\Content\Text($content)
+            );
+        }
 
         if ($hasListOfBlindCarbonCopy) {
-            foreach ($listOfBlindCarbonCopy as $blindCarbonCopy) {
-                $mail->addBcc($blindCarbonCopy);
-            }
+            $message['bcc'] = $listOfBlindCarbonCopy;
         }
 
         if ($hasListOfCarbonCopy) {
-            foreach ($listOfCarbonCopy as $carbonCopy) {
-                $mail->addCc($carbonCopy);
-            }
+            $message['bcc'] = $listOfCarbonCopy;
         }
 
         if ($hasListOfFilesToAttach) {
             foreach ($listOfFilesToAttach as $filePath) {
-                $mail->addAttachment($filePath);
+                new \Hoa\Mail\Content\Attachment($filePath);
             }
         }
 
-        if ($isHtml) {
-            $mail->isHTML();
-        }
-
-        $mail->Body = $content;
-        $mail->addAddress($recipient);
-        $mail->setFrom($sender);
-        $mail->Subject = $subject;
-
-        $mail->send();
+        $message->send();
         //end of business logic
     },
     $usage
