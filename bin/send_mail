@@ -29,6 +29,7 @@ require_once $pathToAutoloadFile;
 //end of including composer autoload.php
 
 use Net\Bazzline\Component\Cli\Environment\CommandLineEnvironment;
+use PHPMailer\PHPMailer\PHPMailer;
 
 $environment    = new CommandLineEnvironment($argv);
 //@todo
@@ -146,58 +147,38 @@ $environment->execute(
         $environment->outputIfVerbosityIsEnabled(($isHtml ? 'send it as html mail' : 'send it as text mail'));
 
         //@see: http://swiftmailer.org/docs/messages.html
-        $message    = Swift_Message::newInstance();
-        $transport  = Swift_SendmailTransport::newInstance('/usr/lib/sendmail -t');
-        $mailer     = Swift_Mailer::newInstance($transport);
+        $mail       = new PHPMailer();
+
+        $mail->isSendmail();
 
         if ($hasListOfBlindCarbonCopy) {
             foreach ($listOfBlindCarbonCopy as $blindCarbonCopy) {
-                $message->addBcc($blindCarbonCopy);
+                $mail->addBcc($blindCarbonCopy);
             }
         }
 
         if ($hasListOfCarbonCopy) {
             foreach ($listOfCarbonCopy as $carbonCopy) {
-                $message->addCc($carbonCopy);
+                $mail->addCc($carbonCopy);
             }
         }
 
         if ($hasListOfFilesToAttach) {
             foreach ($listOfFilesToAttach as $filePath) {
-                $file = new SplFileInfo($filePath);
-
-                switch (strtolower($file->getExtension())) {
-                    case 'jpeg':
-                    case 'jpg':
-                        $contentType = 'image/jpeg';
-                        break;
-                    case 'pdf':
-                        $contentType = 'application/pdf';
-                        break;
-                    default:
-                        $contentType = null;
-                }
-
-                $attachment = Swift_Attachment::fromPath(
-                    $file->getPathname(),
-                    $contentType
-                );
-                $message->attach($attachment);
+                $mail->addAttachment($filePath);
             }
         }
 
         if ($isHtml) {
-            $message->setContentType('text/html');
-        } else {
-            $message->setContentType('text/plain');
+            $mail->isHTML();
         }
 
-        $message->setBody($content);
-        $message->setTo(array($recipient));
-        $message->setFrom(array($sender));
-        $message->setSubject($subject);
+        $mail->Body = $content;
+        $mail->addAddress($recipient);
+        $mail->setFrom($sender);
+        $mail->Subject = $subject;
 
-        $mailer->send($message);
+        $mail->send();
         //end of business logic
     },
     $usage
