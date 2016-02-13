@@ -171,7 +171,11 @@ $environment->execute(
 
         if ($hasListOfFilesToAttach) {
             foreach ($listOfFilesToAttach as $filePath) {
-                new \Hoa\Mail\Content\Attachment($filePath);
+                new \Hoa\Mail\Content\Attachment(
+                    new \Hoa\File\Read(
+                        $filePath
+                    )
+                );
             }
         }
 
