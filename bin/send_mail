@@ -148,7 +148,9 @@ $environment->execute(
         //@see: http://swiftmailer.org/docs/messages.html
         \Hoa\Mail\Message::setDefaultTransport(
             new \Hoa\Mail\Transport\Sendmail(
-                't'
+                array(
+                    't'
+                )
             )
         );
 
