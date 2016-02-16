@@ -146,48 +146,60 @@ $environment->execute(
         $environment->outputIfVerbosityIsEnabled(($isHtml ? 'send it as html mail' : 'send it as text mail'));
 
         //@see: http://swiftmailer.org/docs/messages.html
-        \Hoa\Mail\Message::setDefaultTransport(
-            new \Hoa\Mail\Transport\Sendmail(
-                array(
-                    't'
-                )
-            )
-        );
-
-        $message    = new \Hoa\Mail\Message();
-        $message['From']    = $sender;
-        $message['To']      = $recipient;
-        $message['Subject'] = $subject;
-
-        if ($isHtml) {
-            $message->addContent(
-                new \Hoa\Mail\Content\Html($content)
-            );
-        } else {
-            $message->addContent(
-                new \Hoa\Mail\Content\Text($content)
-            );
-        }
+        $message    = Swift_Message::newInstance();
+        $transport  = Swift_SendmailTransport::newInstance('/usr/lib/sendmail -t');
+        $mailer     = Swift_Mailer::newInstance($transport);
 
         if ($hasListOfBlindCarbonCopy) {
-            $message['bcc'] = $listOfBlindCarbonCopy;
-        }
-
-        if ($hasListOfCarbonCopy) {
-            $message['bcc'] = $listOfCarbonCopy;
-        }
-
-        if ($hasListOfFilesToAttach) {
-            foreach ($listOfFilesToAttach as $filePath) {
-                new \Hoa\Mail\Content\Attachment(
-                    new \Hoa\File\Read(
-                        $filePath
-                    )
-                );
+            foreach ($listOfBlindCarbonCopy as $blindCarbonCopy) {
+                $message->addBcc($blindCarbonCopy);
             }
         }
 
-        $message->send();
+        if ($hasListOfCarbonCopy) {
+            foreach ($listOfCarbonCopy as $carbonCopy) {
+                $message->addCc($carbonCopy);
+            }
+        }
+
+        //begin of attachment handling
+        if ($hasListOfFilesToAttach) {
+            foreach ($listOfFilesToAttach as $filePath) {
+                $file = new SplFileInfo($filePath);
+
+                switch (strtolower($file->getExtension())) {
+                    case 'jpeg':
+                    case 'jpg':
+                        $contentType = 'image/jpeg';
+                        break;
+                    case 'pdf':
+                        $contentType = 'application/pdf';
+                        break;
+                    default:
+                        $contentType = null;
+                }
+
+                $attachment = Swift_Attachment::fromPath(
+                    $file->getPathname(),
+                    $contentType
+                );
+                $message->attach($attachment);
+            }
+        }
+        //end of attachment handling
+
+        if ($isHtml) {
+            $message->setContentType('text/html');
+        } else {
+            $message->setContentType('text/plain');
+        }
+
+        $message->setBody($content);
+        $message->setTo(array($recipient));
+        $message->setFrom(array($sender));
+        $message->setSubject($subject);
+
+        $mailer->send($message);
         //end of business logic
     },
     $usage
