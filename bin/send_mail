@@ -27,17 +27,16 @@ if ($pathToAutoloadFileNotFound) {
 
 require_once $pathToAutoloadFile;
 //end of including composer autoload.php
+use De\Leibelt\SendMail\CommandBuilder;
+use De\Leibelt\SendMail\CommandBuilderFactory;
 use De\Leibelt\SendMail\DomainModel\Address;
+use De\Leibelt\SendMail\DomainModel\Attachment;
 use De\Leibelt\SendMail\DomainModel\HtmlMail;
 use De\Leibelt\SendMail\DomainModel\TextMail;
 use De\Leibelt\SendMail\Service\SwiftShipper;
 use Net\Bazzline\Component\Cli\Environment\CommandLineEnvironment;
 
 $environment    = new CommandLineEnvironment($argv);
-//@todo
-//  add attachment
-//  add --bcc list
-//  add --cc list
 $usage          = basename(__FILE__) . ' "<email address of the sender>" "<email address of the recipient>" "<subject>" "<path/to/the/file.txt|html>" [--bcc="<email address of an blind carbon copy - can be used multiple times>"] [--cc="<email address of a carbon copy - can be used multiple times>"] [--attachment="path/to/a/file"] [-v|--verbose]';
 
 $environment->execute(
@@ -73,93 +72,32 @@ $environment->execute(
         $hasListOfBlindCarbonCopy   = (!is_null($listOfBlindCarbonCopy));
         $hasListOfCarbonCopy        = (!is_null($listOfCarbonCopy));
         $hasListOfFilesToAttach     = (!is_null($listOfFilesToAttach));
-
-        if ($hasListOfBlindCarbonCopy) {
-            foreach ($listOfBlindCarbonCopy as $blindCarbonCopy)  {
-                $invalidCarbonCopyProvided = (!filter_var($blindCarbonCopy, FILTER_VALIDATE_EMAIL));
-
-                if ($invalidCarbonCopyProvided) {
-                    throw new InvalidArgumentException(
-                        'invalid blind carbon copy provided'
-                    );
-                }
-            }
-        }
         //end of input validation
 
         //begin of business logic
-        $attachments    = array();
-        $bccs           = array();
-        $ccs            = array();
-        $file       = new SplFileObject($filePath);
-        $content    = $file->fread($file->getSize());
-        $isHtml     = (strtolower($file->getExtension()) === 'html');
-        $shipper = new SwiftShipper();
+        $factory        = new CommandBuilderFactory();
+        $builder        = $factory->create();
 
-        $environment->outputIfVerbosityIsEnabled('file content: ' . $content);
-        $environment->outputIfVerbosityIsEnabled(($isHtml ? 'send it as html mail' : 'send it as text mail'));
+        $builder->start()
+            ->withPathToTheContentFile($filePath)
+            ->withRecipient($recipient)
+            ->withSender($sender)
+            ->withSubject($subject);
 
         if ($hasListOfBlindCarbonCopy) {
-            foreach ($listOfBlindCarbonCopy as $blindCarbonCopy) {
-                $bccs[] = new Address($blindCarbonCopy);
-            }
+            $builder->withListOfBlindCarbonCopy($listOfBlindCarbonCopy);
         }
 
         if ($hasListOfCarbonCopy) {
-            foreach ($listOfCarbonCopy as $carbonCopy) {
-                $ccs[] = new Address($carbonCopy);
-            }
+            $builder->withListOfCarbonCopy($listOfCarbonCopy);
         }
 
-        //begin of attachment handling
         if ($hasListOfFilesToAttach) {
-            foreach ($listOfFilesToAttach as $filePath) {
-                $file = new SplFileInfo($filePath);
-
-                switch (strtolower($file->getExtension())) {
-                    case 'jpeg':
-                    case 'jpg':
-                        $contentType = 'image/jpeg';
-                        break;
-                    case 'pdf':
-                        $contentType = 'application/pdf';
-                        break;
-                    default:
-                        $contentType = null;
-                }
-
-                $attachments[] = new \De\Leibelt\SendMail\DomainModel\Attachment(
-                    $file->getPathname(),
-                    $file->getBasename(),
-                    $contentType
-                );
-            }
-        }
-        //end of attachment handling
-
-        if ($isHtml) {
-            $mail = new HtmlMail(
-                $sender,
-                $recipient,
-                $subject,
-                $content,
-                $attachments,
-                $ccs,
-                $bccs
-            );
-        } else {
-            $mail = new TextMail(
-                $sender,
-                $recipient,
-                $subject,
-                $content,
-                $attachments,
-                $ccs,
-                $bccs
-            );
+            $builder->withListOfAttachments($listOfFilesToAttach);
         }
 
-        $shipper->ship($mail);
+        $command = $builder->build();
+        $command->execute();
         //end of business logic
     },
     $usage
