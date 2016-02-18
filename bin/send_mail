@@ -27,7 +27,10 @@ if ($pathToAutoloadFileNotFound) {
 
 require_once $pathToAutoloadFile;
 //end of including composer autoload.php
-
+use De\Leibelt\SendMail\DomainModel\Address;
+use De\Leibelt\SendMail\DomainModel\HtmlMail;
+use De\Leibelt\SendMail\DomainModel\TextMail;
+use De\Leibelt\SendMail\Service\SwiftShipper;
 use Net\Bazzline\Component\Cli\Environment\CommandLineEnvironment;
 
 $environment    = new CommandLineEnvironment($argv);
@@ -67,35 +70,6 @@ $environment->execute(
             )
         );
 
-        $invalidFilePathProvided    = (!is_file($filePath));
-        $invalidRecipientProvided   = (!filter_var($recipient, FILTER_VALIDATE_EMAIL));
-        $invalidSenderProvided      = (!filter_var($sender, FILTER_VALIDATE_EMAIL));
-        $invalidSubjectProvided     = (strlen($subject) < 1);
-
-        if ($invalidFilePathProvided) {
-            throw new InvalidArgumentException(
-                'invalid file path provided'
-            );
-        }
-
-        if ($invalidRecipientProvided) {
-            throw new InvalidArgumentException(
-                'invalid recipient provided'
-            );
-        }
-
-        if ($invalidSenderProvided) {
-            throw new InvalidArgumentException(
-                'invalid sender provided'
-            );
-        }
-
-        if ($invalidSubjectProvided) {
-            throw new InvalidArgumentException(
-                'invalid subject provided'
-            );
-        }
-
         $hasListOfBlindCarbonCopy   = (!is_null($listOfBlindCarbonCopy));
         $hasListOfCarbonCopy        = (!is_null($listOfCarbonCopy));
         $hasListOfFilesToAttach     = (!is_null($listOfFilesToAttach));
@@ -111,54 +85,29 @@ $environment->execute(
                 }
             }
         }
-
-        if ($hasListOfCarbonCopy) {
-            foreach ($listOfCarbonCopy as $carbonCopy)  {
-                $invalidCarbonCopyProvided = (!filter_var($carbonCopy, FILTER_VALIDATE_EMAIL));
-
-                if ($invalidCarbonCopyProvided) {
-                    throw new InvalidArgumentException(
-                        'invalid carbon copy provided'
-                    );
-                }
-            }
-        }
-
-        if ($hasListOfFilesToAttach) {
-            foreach ($listOfFilesToAttach as $filePath) {
-                $invalidFilePathProvided = (!is_readable($filePath));
-
-                if ($invalidFilePathProvided) {
-                    throw new InvalidArgumentException(
-                        'invalid file path for an attachment provided'
-                    );
-                }
-            }
-        }
         //end of input validation
 
         //begin of business logic
+        $attachments    = array();
+        $bccs           = array();
+        $ccs            = array();
         $file       = new SplFileObject($filePath);
         $content    = $file->fread($file->getSize());
         $isHtml     = (strtolower($file->getExtension()) === 'html');
+        $shipper = new SwiftShipper();
 
         $environment->outputIfVerbosityIsEnabled('file content: ' . $content);
         $environment->outputIfVerbosityIsEnabled(($isHtml ? 'send it as html mail' : 'send it as text mail'));
 
-        //@see: http://swiftmailer.org/docs/messages.html
-        $message    = Swift_Message::newInstance();
-        $transport  = Swift_SendmailTransport::newInstance('/usr/lib/sendmail -t');
-        $mailer     = Swift_Mailer::newInstance($transport);
-
         if ($hasListOfBlindCarbonCopy) {
             foreach ($listOfBlindCarbonCopy as $blindCarbonCopy) {
-                $message->addBcc($blindCarbonCopy);
+                $bccs[] = new Address($blindCarbonCopy);
             }
         }
 
         if ($hasListOfCarbonCopy) {
             foreach ($listOfCarbonCopy as $carbonCopy) {
-                $message->addCc($carbonCopy);
+                $ccs[] = new Address($carbonCopy);
             }
         }
 
@@ -179,27 +128,38 @@ $environment->execute(
                         $contentType = null;
                 }
 
-                $attachment = Swift_Attachment::fromPath(
+                $attachments[] = new \De\Leibelt\SendMail\DomainModel\Attachment(
                     $file->getPathname(),
+                    $file->getBasename(),
                     $contentType
                 );
-                $message->attach($attachment);
             }
         }
         //end of attachment handling
 
         if ($isHtml) {
-            $message->setContentType('text/html');
+            $mail = new HtmlMail(
+                $sender,
+                $recipient,
+                $subject,
+                $content,
+                $attachments,
+                $ccs,
+                $bccs
+            );
         } else {
-            $message->setContentType('text/plain');
+            $mail = new TextMail(
+                $sender,
+                $recipient,
+                $subject,
+                $content,
+                $attachments,
+                $ccs,
+                $bccs
+            );
         }
 
-        $message->setBody($content);
-        $message->setTo(array($recipient));
-        $message->setFrom(array($sender));
-        $message->setSubject($subject);
-
-        $mailer->send($message);
+        $shipper->ship($mail);
         //end of business logic
     },
     $usage
