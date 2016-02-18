@@ -57,7 +57,7 @@ This is free software: you are free to change and redistribute it.  There is NO 
         * add "--content-as-text" and "--content-as-html" as optional lists
         * create install script that does the steps in the "by hand" section
         * move code into small classes (like "ValidateEmail" etc.)
-    * started content type detection for attachments
+    * removed unused use statements
 * [1.3.1](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.3.1) - released at 18.02.2016
     * created Builder to easy up switching between different mail libraries
 * [1.3.0](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.3.0) - released at 18.02.2016

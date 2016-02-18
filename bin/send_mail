@@ -27,13 +27,8 @@ if ($pathToAutoloadFileNotFound) {
 
 require_once $pathToAutoloadFile;
 //end of including composer autoload.php
-use De\Leibelt\SendMail\CommandBuilder;
+
 use De\Leibelt\SendMail\CommandBuilderFactory;
-use De\Leibelt\SendMail\DomainModel\Address;
-use De\Leibelt\SendMail\DomainModel\Attachment;
-use De\Leibelt\SendMail\DomainModel\HtmlMail;
-use De\Leibelt\SendMail\DomainModel\TextMail;
-use De\Leibelt\SendMail\Service\SwiftShipper;
 use Net\Bazzline\Component\Cli\Environment\CommandLineEnvironment;
 
 $environment    = new CommandLineEnvironment($argv);
@@ -72,7 +67,7 @@ $environment->execute(
         $hasListOfBlindCarbonCopy   = (!is_null($listOfBlindCarbonCopy));
         $hasListOfCarbonCopy        = (!is_null($listOfCarbonCopy));
         $hasListOfFilesToAttach     = (!is_null($listOfFilesToAttach));
-        //end of input validation
+        //end of input validationhttp://www.vwiss.de/Downloads/Liebe_Gruesse_zur_Hochzeit.mp4
 
         //begin of business logic
         $factory        = new CommandBuilderFactory();
