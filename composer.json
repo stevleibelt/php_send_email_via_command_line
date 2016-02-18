@@ -23,5 +23,9 @@
         "psr-4": {
             "De\\Leibelt\\SendMail\\": "source/"
         }
+    },
+    "suggest": {
+        "swiftmailer/swiftmailer": "sends mail via swiftmailer",
+        "zendframework/zend-mail": "sends mail via zend-mail"
     }
 }
