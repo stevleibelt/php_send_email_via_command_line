@@ -172,7 +172,7 @@ class CommandBuilder
 
             $attachments[] = new Attachment(
                 $file->getPathname(),
-                $file->getBasename(),
+                $file->getRealPath(),
                 $contentType
             );
         }
