@@ -9,7 +9,7 @@
     ],
     "description": "free as in freedom cli script to send emails",
     "keywords": ["gpl", "free as in freedom", "php", "cli", "command line", "mail", "console", "email"],
-    "license": "GPLv3",
+    "license": "GPL-3.0-or-later",
     "minimum-stability": "dev",
     "name": "stevleibelt/php_send_email_via_command_line",
     "require": {
