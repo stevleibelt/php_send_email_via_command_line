@@ -11,6 +11,7 @@ use Swift_Attachment;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_SendmailTransport;
+use Swift_SmtpTransport;
 
 class SwiftShipper extends AbstractShipper
 {
@@ -20,9 +21,9 @@ class SwiftShipper extends AbstractShipper
      */
     public function ship(AbstractMail $mail)
     {
-        $message    = Swift_Message::newInstance();
-        $transport  = Swift_SendmailTransport::newInstance('/usr/lib/sendmail -t');
-        $mailer     = Swift_Mailer::newInstance($transport);
+        $message    = new Swift_Message();
+        $transport  = new Swift_SendmailTransport('/usr/lib/sendmail -t');
+        $mailer     = new Swift_Mailer($transport);
 
         foreach ($mail->attachments() as $attachment) {
             $message->attach(
