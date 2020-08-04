@@ -51,6 +51,18 @@ composer install
 composer require stevleibelt/php_send_email_via_command_line
 ```
 
+## Configuration
+
+Currently, there is no merging of `local.dist.php` and `local.php`.
+If you create a `local.php`, you have to copy the whole configuration section.
+
+```
+#only do it if you really need it.
+cp configuration/local.dist.php configuration/local.php
+#adapt it to your needs
+vim configuration/local.php
+```
+
 # Links
 
 # History
@@ -64,6 +76,8 @@ composer require stevleibelt/php_send_email_via_command_line
     * added suggests
     * fixed license spelling issue
     * removed unused use statements
+* [1.5.0](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.5.0) - released at 2020-08-04
+    * support for `configuration/local.dist.php` and `configuration/local.php` to add capability to modify the supported transporters (currently `sendmail` and `smtp`)
 * [1.4.1](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.4.1) - released at 2020-08-04
     * fixed missing migration code
 * [1.4.0](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.4.0) - released at 2020-08-04

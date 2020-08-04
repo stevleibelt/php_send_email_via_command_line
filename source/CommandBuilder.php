@@ -10,7 +10,6 @@ use De\Leibelt\SendMail\DomainModel\Attachment;
 use De\Leibelt\SendMail\DomainModel\HtmlMail;
 use De\Leibelt\SendMail\DomainModel\TextMail;
 use De\Leibelt\SendMail\Service\AbstractShipper;
-use De\Leibelt\SendMail\Service\SwiftShipper;
 use SplFileInfo;
 use SplFileObject;
 

@@ -6,6 +6,7 @@
 namespace De\Leibelt\SendMail\Service;
 
 use De\Leibelt\SendMail\DomainModel\AbstractMail;
+use De\Leibelt\SendMail\DomainModel\Configuration;
 use De\Leibelt\SendMail\DomainModel\HtmlMail;
 use Swift_Attachment;
 use Swift_Mailer;
@@ -15,15 +16,22 @@ use Swift_SmtpTransport;
 
 class SwiftShipper extends AbstractShipper
 {
+    /** @var Swift_Mailer */
+    private $mailer;
+
+    public function __construct(Swift_Mailer $mailer)
+    {
+        $this->mailer = $mailer;
+    }
+
+
     /**
      * @param AbstractMail $mail
      * @see: http://swiftmailer.org/docs/messages.html
      */
     public function ship(AbstractMail $mail)
     {
-        $message    = new Swift_Message();
-        $transport  = new Swift_SendmailTransport('/usr/lib/sendmail -t');
-        $mailer     = new Swift_Mailer($transport);
+        $message = new Swift_Message();
 
         foreach ($mail->attachments() as $attachment) {
             $message->attach(
@@ -53,6 +61,6 @@ class SwiftShipper extends AbstractShipper
         $message->setFrom(array($mail->from()));
         $message->setSubject($mail->subject());
 
-        $mailer->send($message);
+        $this->mailer->send($message);
     }
 }

@@ -1,0 +1,18 @@
+<?php
+
+return [
+    'transporter'   => [
+        //set the active transporter
+        'active_transporter_class_name'     => Swift_SmtpTransport::class,
+        //this are all supported arguments or optional settings for all supported transporters
+        'list_of_transporter_to_arguments'  => [
+            Swift_SendmailTransport::class => [
+                'command'   => '/usr/lib/sendmail -t'
+            ],
+            Swift_SmtpTransport::class => [
+                'hostname'  => '127.0.0.1',
+                'port'      => 25
+            ]
+        ]
+    ]
+];
