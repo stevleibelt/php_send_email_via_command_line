@@ -77,6 +77,8 @@ vim configuration/local.php
     * added suggests
     * fixed license spelling issue
     * removed unused use statements
+* [1.6.1](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.6.1) - released at 2020-08-04
+    * fixed issue when using SendmailTransporter
 * [1.6.0](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.6.0) - released at 2020-08-04
     * added logging support (file based logging and cli output)
 * [1.5.0](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.5.0) - released at 2020-08-04
