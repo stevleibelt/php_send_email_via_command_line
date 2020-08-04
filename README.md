@@ -64,6 +64,9 @@ composer require stevleibelt/php_send_email_via_command_line
     * added suggests
     * fixed license spelling issue
     * removed unused use statements
+* [1.4.0](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.4.0) - released at 2020-08-04
+    * bumped version of php von 5.3 to 7.2
+    * bumped version of swiftmailer von 5.4 to 6.0
 * [1.3.2](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.3.2) - released at 04.11.2016
     * fixed issue [--attachment does not work with relative paths](https://github.com/stevleibelt/php_send_email_via_command_line/issues/1)
 * [1.3.1](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.3.1) - released at 18.02.2016
