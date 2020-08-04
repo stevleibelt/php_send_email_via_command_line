@@ -1,4 +1,5 @@
 .idea
 composer.lock
 configuration/local.php
+data/log/*.log
 vendor
