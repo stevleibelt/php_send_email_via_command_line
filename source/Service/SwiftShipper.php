@@ -16,12 +16,18 @@ use Swift_SmtpTransport;
 
 class SwiftShipper extends AbstractShipper
 {
+    /** @var DumpLogTrigger */
+    private $dumpLogTrigger;
+
     /** @var Swift_Mailer */
     private $mailer;
 
-    public function __construct(Swift_Mailer $mailer)
-    {
-        $this->mailer = $mailer;
+    public function __construct(
+        DumpLogTrigger $dumpLogTrigger,
+        Swift_Mailer $mailer
+    ) {
+        $this->dumpLogTrigger   = $dumpLogTrigger;
+        $this->mailer           = $mailer;
     }
 
 
@@ -57,10 +63,19 @@ class SwiftShipper extends AbstractShipper
         }
 
         $message->setBody($mail->content());
-        $message->setTo(array($mail->to()));
-        $message->setFrom(array($mail->from()));
+        $message->setTo(
+            [
+                $mail->to()
+            ]
+        );
+        $message->setFrom(
+            [
+                $mail->from()
+            ]
+        );
         $message->setSubject($mail->subject());
 
         $this->mailer->send($message);
+        $this->dumpLogTrigger->triggerLoggerDump();
     }
 }

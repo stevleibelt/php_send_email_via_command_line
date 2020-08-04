@@ -10,6 +10,7 @@ use De\Leibelt\SendMail\DomainModel\Attachment;
 use De\Leibelt\SendMail\DomainModel\HtmlMail;
 use De\Leibelt\SendMail\DomainModel\TextMail;
 use De\Leibelt\SendMail\Service\AbstractShipper;
+use De\Leibelt\SendMail\Service\DumpLogTrigger;
 use SplFileInfo;
 use SplFileObject;
 
@@ -39,12 +40,7 @@ class CommandBuilder
     /** @var string */
     private $subject;
 
-    /**
-     * CommandBuilder constructor.
-     * @param AbstractShipper $shipper
-     */
-    public function __construct(AbstractShipper $shipper)
-    {
+    public function __construct(AbstractShipper $shipper) {
         $this->shipper = $shipper;
     }
 
@@ -141,9 +137,9 @@ class CommandBuilder
     public function build()
     {
         //begin of dependencies
-        $attachments    = array();
-        $bccs           = array();
-        $ccs            = array();
+        $attachments    = [];
+        $bccs           = [];
+        $ccs            = [];
         $file           = new SplFileObject($this->pathToTheContentFile);
         $content        = $file->fread($file->getSize());
         $isHtml         = (strtolower($file->getExtension()) === 'html');
@@ -218,9 +214,9 @@ class CommandBuilder
 
     private function reset()
     {
-        $this->listOfAttachments        = array();
-        $this->listOfBlindCarbonCopy    = array();
-        $this->listOfCarbonCopy         = array();
+        $this->listOfAttachments        = [];
+        $this->listOfBlindCarbonCopy    = [];
+        $this->listOfCarbonCopy         = [];
         $this->pathToTheContentFile     = '';
         $this->recipient                = '';
         $this->sender                   = '';

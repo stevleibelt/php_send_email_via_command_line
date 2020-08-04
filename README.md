@@ -73,9 +73,12 @@ vim configuration/local.php
         * add "--content-as-text" and "--content-as-html" as optional lists
         * create install script that does the steps in the "by hand" section
         * create shell script to do a step by step selection
+        * combine --verbose with EchoLogger
     * added suggests
     * fixed license spelling issue
     * removed unused use statements
+* [1.6.0](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.6.0) - released at 2020-08-04
+    * added logging support (file based logging and cli output)
 * [1.5.0](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.5.0) - released at 2020-08-04
     * support for `configuration/local.dist.php` and `configuration/local.php` to add capability to modify the supported transporters (currently `sendmail` and `smtp`)
 * [1.4.1](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.4.1) - released at 2020-08-04

@@ -5,10 +5,15 @@
  */
 namespace De\Leibelt\SendMail;
 
+use De\Leibelt\SendMail\Service\DumpLogTrigger;
 use De\Leibelt\SendMail\Service\SwiftShipper;
 use InvalidArgumentException;
 use RuntimeException;
 use Swift_Mailer;
+use Swift_Plugins_Logger;
+use Swift_Plugins_LoggerPlugin;
+use Swift_Plugins_Loggers_ArrayLogger;
+use Swift_Plugins_Loggers_EchoLogger;
 use Swift_SendmailTransport;
 use Swift_SmtpTransport;
 use Swift_Transport;
@@ -20,9 +25,58 @@ class CommandBuilderFactory
      */
     public function create()
     {
-        return new CommandBuilder(
-            $this->buildShipper()
-        );
+        if (class_exists('Swift_Mailer')) {
+            $configuration = $this->loadConfiguration();
+            $transport = $this->buildTransport($configuration['transporter']);
+            $loggerPluginOrNull = $this->buildLoggerPlugin($configuration['mailer']);
+            $mailer = $this->buildMailer($transport, $loggerPluginOrNull);
+
+            return new CommandBuilder(
+                new SwiftShipper(
+                    new DumpLogTrigger(
+                        $configuration['mailer']['debug']['log_file_path'],
+                        $loggerPluginOrNull
+                    ),
+                    $mailer
+                )
+            );
+        } else {
+            throw new RuntimeException(
+                'could not create a shipper, no need and supported library installed'
+            );
+        }
+    }
+
+    private function buildLoggerPlugin(array $configuration):?Swift_Plugins_Logger
+    {
+        $loggerOrNull = null;
+
+        if ($configuration['debug']['enabled'] === true) {
+            if ($configuration['debug']['log_to_file']) {
+                $loggerOrNull = new Swift_Plugins_Loggers_ArrayLogger(100);
+            } else {
+                $loggerOrNull = new Swift_Plugins_Loggers_EchoLogger(false);
+            }
+        }
+
+        return $loggerOrNull;
+    }
+
+    private function buildMailer(
+        Swift_Transport $transport,
+        ?Swift_Plugins_Logger $loggerOrNull
+    ): Swift_Mailer {
+        $mailer = new Swift_Mailer($transport);
+
+        if ($loggerOrNull instanceof Swift_Plugins_Logger) {
+            $mailer->registerPlugin(
+                new Swift_Plugins_LoggerPlugin(
+                    $loggerOrNull
+                )
+            );
+        }
+
+        return $mailer;
     }
 
     private function buildTransport(array $configuration): Swift_Transport
@@ -48,24 +102,6 @@ class CommandBuilderFactory
         }
 
         return $transport;
-    }
-
-    private function buildShipper(): SwiftShipper
-    {
-        if (class_exists('Swift_Mailer')) {
-            $configuration = $this->loadConfiguration();
-            $transport = $this->buildTransport($configuration['transporter']);
-
-            return new SwiftShipper(
-                new Swift_Mailer(
-                    $transport
-                )
-            );
-        } else {
-            throw new RuntimeException(
-                'could not create a shipper, no need and supported library installed'
-            );
-        }
     }
 
     private function loadConfiguration(): array
