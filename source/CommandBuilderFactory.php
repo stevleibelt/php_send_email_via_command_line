@@ -83,7 +83,7 @@ class CommandBuilderFactory
         switch ($configuration['active_transporter_class_name']) {
             case Swift_SendmailTransport::class:
                 $transport  = new Swift_SendmailTransport(
-                    $configuration[Swift_SendmailTransport::class]['command']
+                    $configuration['list_of_transporter_to_arguments'][Swift_SendmailTransport::class]['command']
                 );
                 break;
             case Swift_SmtpTransport::class:
