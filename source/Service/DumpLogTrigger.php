@@ -28,7 +28,13 @@ final class DumpLogTrigger
 
     public function triggerLoggerDump()
     {
-        if ($this->swiftLogger instanceof Swift_Plugins_Loggers_ArrayLogger) {
+        //buzz me if you don't like this variable name
+        $dumpItLikeItsHot = (
+            ($this->swiftLogger instanceof Swift_Plugins_Loggers_ArrayLogger)
+            && (count($this->swiftLogger->dump()) > 0)
+        );
+
+        if ($dumpItLikeItsHot) {
             if (is_string($this->filePathToLogOrNull)) {
                 file_put_contents(
                     $this->filePathToLogOrNull,
