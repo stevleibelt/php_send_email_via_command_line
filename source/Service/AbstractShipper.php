@@ -10,8 +10,5 @@ use De\Leibelt\SendMail\DomainModel\Configuration;
 
 abstract class AbstractShipper
 {
-    /**
-     * @param AbstractMail $mail
-     */
     abstract public function ship(AbstractMail $mail);
 }

@@ -5,4 +5,4 @@
  */
 namespace De\Leibelt\SendMail\DomainModel;
 
-class HtmlMail extends AbstractMail {}
+final class HtmlMail extends AbstractMail {}

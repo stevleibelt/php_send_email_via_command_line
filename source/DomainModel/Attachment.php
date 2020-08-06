@@ -7,7 +7,7 @@ namespace De\Leibelt\SendMail\DomainModel;
 
 use InvalidArgumentException;
 
-class Attachment
+final class Attachment
 {
     /** @var  */
     private $contentType;
@@ -25,8 +25,11 @@ class Attachment
      * @param string $contentType
      * @throws InvalidArgumentException
      */
-    public function __construct($name, $path, $contentType)
-    {
+    public function __construct(
+        string $name,
+        string $path,
+        string $contentType
+    ) {
         $this->contentType  = $contentType;
         $this->name         = $name;
         $this->path         = $path;
@@ -38,26 +41,17 @@ class Attachment
         }
     }
 
-    /**
-     * @return string
-     */
-    public function contentType()
+    public function contentType(): string
     {
         return $this->contentType;
     }
 
-    /**
-     * @return string
-     */
-    public function name()
+    public function name(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
-    public function path()
+    public function path(): string
     {
         return $this->path;
     }

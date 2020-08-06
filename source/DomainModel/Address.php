@@ -7,7 +7,7 @@ namespace De\Leibelt\SendMail\DomainModel;
 
 use InvalidArgumentException;
 
-class Address
+final class Address
 {
     /** @var string */
     private $address;
@@ -22,32 +22,20 @@ class Address
      * @throws InvalidArgumentException
      * @todo validate address
      */
-    public function __construct($address, $name = null)
-    {
+    public function __construct(
+        string $address,
+        string $name = null
+    ) {
         $this->address  = $address;
         $this->name     = $name;
     }
 
-    /**
-     * @return string
-     */
-    public function address()
+    public function address(): string
     {
         return $this->address;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasName()
-    {
-        return (!is_null($this->name));
-    }
-
-    /**
-     * @return null|string
-     */
-    public function name()
+    public function name(): ?string
     {
         return $this->name;
     }

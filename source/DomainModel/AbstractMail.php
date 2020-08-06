@@ -36,13 +36,20 @@ abstract class AbstractMail
      * @param string $to
      * @param string $subject
      * @param string $content
-     * @param array|Address[] $attachments
+     * @param array|Attachment[] $attachments
      * @param array|Address[] $ccs
      * @param array|Address[] $bccs
      * @throws InvalidArgumentException
      */
-    public function __construct($from, $to, $subject, $content, array $attachments, array $ccs, array $bccs)
-    {
+    public function __construct(
+        string $from,
+        string $to,
+        string $subject,
+        string $content,
+        array $attachments,
+        array $ccs,
+        array $bccs
+    ) {
         $this->attachments  = $attachments;
         $this->bccs         = $bccs;
         $this->ccs          = $ccs;
@@ -59,9 +66,9 @@ abstract class AbstractMail
     }
 
     /**
-     * @return array|Address[]|Attachment[]
+     * @return array|Attachment[]
      */
-    public function attachments()
+    public function attachments(): array
     {
         return $this->attachments;
     }
@@ -69,7 +76,7 @@ abstract class AbstractMail
     /**
      * @return array|Address[]
      */
-    public function bccs()
+    public function bccs(): array
     {
         return $this->bccs;
     }
@@ -77,15 +84,12 @@ abstract class AbstractMail
     /**
      * @return array|Address[]
      */
-    public function ccs()
+    public function ccs(): array
     {
         return $this->ccs;
     }
 
-    /**
-     * @return string
-     */
-    public function content()
+    public function content(): string
     {
         return $this->content;
     }

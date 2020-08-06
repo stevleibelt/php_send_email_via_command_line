@@ -8,7 +8,7 @@ namespace De\Leibelt\SendMail;
 use De\Leibelt\SendMail\DomainModel\AbstractMail;
 use De\Leibelt\SendMail\Service\AbstractShipper;
 
-class Command
+final class Command
 {
     /** @var AbstractMail */
     private $mail;
@@ -16,8 +16,10 @@ class Command
     /** @var AbstractShipper */
     private $shipper;
 
-    public function __construct(AbstractMail $mail, AbstractShipper $shipper)
-    {
+    public function __construct(
+        AbstractMail $mail,
+        AbstractShipper $shipper
+    ) {
         $this->mail     = $mail;
         $this->shipper  = $shipper;
     }

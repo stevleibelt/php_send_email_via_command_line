@@ -10,12 +10,15 @@ use De\Leibelt\SendMail\DomainModel\Attachment;
 use De\Leibelt\SendMail\DomainModel\HtmlMail;
 use De\Leibelt\SendMail\DomainModel\TextMail;
 use De\Leibelt\SendMail\Service\AbstractShipper;
-use De\Leibelt\SendMail\Service\DumpLogTrigger;
+use Net\Bazzline\Component\Cli\Environment\CommandLineEnvironment;
 use SplFileInfo;
 use SplFileObject;
 
-class CommandBuilder
+final class CommandBuilder
 {
+    /** @var CommandLineEnvironment */
+    private $commandlineEnvironment;
+
     /** @var array */
     private $listOfAttachments;
 
@@ -40,101 +43,71 @@ class CommandBuilder
     /** @var string */
     private $subject;
 
-    public function __construct(AbstractShipper $shipper) {
-        $this->shipper = $shipper;
+    public function __construct(
+        CommandLineEnvironment  $commandLineEnvironment,
+        AbstractShipper $shipper
+    ) {
+        $this->commandlineEnvironment   = $commandLineEnvironment;
+        $this->shipper                  = $shipper;
     }
 
-    /**
-     * @return $this
-     */
-    public function start()
+    public function start(): self
     {
         $this->reset();
 
         return $this;
     }
 
-    /**
-     * @param array $list
-     * @return $this
-     */
-    public function withListOfAttachments(array $list)
+    public function withListOfAttachments(array $list): self
     {
         $this->listOfAttachments = $list;
 
         return $this;
     }
 
-    /**
-     * @param array $list
-     * @return $this
-     */
-    public function withListOfBlindCarbonCopy(array $list)
+    public function withListOfBlindCarbonCopy(array $list): self
     {
         $this->listOfBlindCarbonCopy = $list;
 
         return $this;
     }
 
-    /**
-     * @param array $list
-     * @return $this
-     */
-    public function withListOfCarbonCopy(array $list)
+    public function withListOfCarbonCopy(array $list): self
     {
         $this->listOfCarbonCopy = $list;
 
         return $this;
     }
 
-    /**
-     * @param string $path
-     * @return $this
-     */
-    public function withPathToTheContentFile($path)
+    public function withPathToTheContentFile(string $path): self
     {
         $this->pathToTheContentFile = $path;
 
         return $this;
     }
 
-    /**
-     * @param string $recipient
-     * @return $this
-     */
-    public function withRecipient($recipient)
+    public function withRecipient(string $recipient): self
     {
         $this->recipient = $recipient;
 
         return $this;
     }
 
-    /**
-     * @param string $sender
-     * @return $this
-     */
-    public function withSender($sender)
+    public function withSender(string $sender): self
     {
         $this->sender = $sender;
 
         return $this;
     }
 
-    /**
-     * @param string $subject
-     * @return $this
-     */
-    public function withSubject($subject)
+    public function withSubject(string $subject): self
     {
         $this->subject = $subject;
 
         return $this;
     }
 
-    /**
-     * @return Command
-     */
-    public function build()
+    public function build(): Command
     {
         //begin of dependencies
         $attachments    = [];
@@ -151,25 +124,35 @@ class CommandBuilder
 
         //begin of attachment handling
         foreach ($this->listOfAttachments as $filePath) {
-            $file = new SplFileInfo($filePath);
+            if (is_readable($filePath)) {
+                $file = new SplFileInfo($filePath);
 
-            switch (strtolower($file->getExtension())) {
-                case 'jpeg':
-                case 'jpg':
-                    $contentType = 'image/jpeg';
-                    break;
-                case 'pdf':
-                    $contentType = 'application/pdf';
-                    break;
-                default:
-                    $contentType = null;
+                switch (strtolower($file->getExtension())) {
+                    case 'jpeg':
+                    case 'jpg':
+                        $contentType = 'image/jpeg';
+                        break;
+                    case 'pdf':
+                        $contentType = 'application/pdf';
+                        break;
+                    default:
+                        $contentType = null;
+                }
+
+                $attachments[] = new Attachment(
+                    $file->getPathname(),
+                    $file->getRealPath(),
+                    $contentType
+                );
+            } else {
+                $this->commandlineEnvironment->output(
+                    sprintf(
+                        '[%s]: Filepath >>%s<< is not readable. This attachment is not attached to this mail.',
+                        __METHOD__,
+                        $filePath
+                    )
+                );
             }
-
-            $attachments[] = new Attachment(
-                $file->getPathname(),
-                $file->getRealPath(),
-                $contentType
-            );
         }
         //end of attachment handling
 

@@ -6,13 +6,14 @@
  */
 
 //begin of including composer autoload.php
-$possiblePathsToComposerAutoloadFile = array(
+$possiblePathsToComposerAutoloadFile = [
     __DIR__ . '/../../../autoload.php',
     __DIR__ . '/../../vendor/autoload.php',
     __DIR__ . '/../vendor/autoload.php'
-);
+];
 $pathToAutoloadFileNotFound = true;
 $pathToAutoloadFile         = null;
+
 foreach ($possiblePathsToComposerAutoloadFile as $path) {
     if (file_exists($path)) {
         $pathToAutoloadFile         = $path;
@@ -32,7 +33,8 @@ use De\Leibelt\SendMail\CommandBuilderFactory;
 use Net\Bazzline\Component\Cli\Environment\CommandLineEnvironment;
 
 $environment    = new CommandLineEnvironment($argv);
-$usage          = basename(__FILE__) . ' "<email address of the sender>" "<email address of the recipient>" "<subject>" "<path/to/the/file.txt|html>" [--bcc="<email address of an blind carbon copy - can be used multiple times>"] [--cc="<email address of a carbon copy - can be used multiple times>"] [--attachment="path/to/a/file"] [-v|--verbose]';
+$usage          = basename(__FILE__)
+    . ' "<email address of the sender>" "<email address of the recipient>" "<subject>" "<path/to/the/file.txt|html>" [--bcc="<email address of an blind carbon copy - can be used multiple times>"] [--cc="<email address of a carbon copy - can be used multiple times>"] [--attachment="path/to/a/file"] [-v|--verbose]';
 
 $environment->execute(
     function (CommandLineEnvironment $environment) {
@@ -56,18 +58,18 @@ $environment->execute(
         $subject    = $values[2];
 
         $environment->outputIfVerbosityIsEnabled(
-            array(
+            [
                 'file path: ' . $filePath,
                 'recipient: ' . $recipient,
                 'sender: ' . $sender,
                 'subject: ' . $subject
-            )
+            ]
         );
 
         $hasListOfBlindCarbonCopy   = (!is_null($listOfBlindCarbonCopy));
         $hasListOfCarbonCopy        = (!is_null($listOfCarbonCopy));
         $hasListOfFilesToAttach     = (!is_null($listOfFilesToAttach));
-        //end of input validationhttp://www.vwiss.de/Downloads/Liebe_Gruesse_zur_Hochzeit.mp4
+        //end of input validation
 
         //begin of business logic
         $factory        = new CommandBuilderFactory();

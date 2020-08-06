@@ -8,6 +8,7 @@ namespace De\Leibelt\SendMail;
 use De\Leibelt\SendMail\Service\DumpLogTrigger;
 use De\Leibelt\SendMail\Service\SwiftShipper;
 use InvalidArgumentException;
+use Net\Bazzline\Component\Cli\Environment\CommandLineEnvironment;
 use RuntimeException;
 use Swift_Mailer;
 use Swift_Plugins_Logger;
@@ -20,10 +21,7 @@ use Swift_Transport;
 
 class CommandBuilderFactory
 {
-    /**
-     * @return CommandBuilder
-     */
-    public function create()
+    public function create(CommandLineEnvironment  $commandLineEnvironment): CommandBuilder
     {
         if (class_exists('Swift_Mailer')) {
             $configuration = $this->loadConfiguration();
@@ -32,6 +30,7 @@ class CommandBuilderFactory
             $mailer = $this->buildMailer($transport, $loggerPluginOrNull);
 
             return new CommandBuilder(
+                $commandLineEnvironment,
                 new SwiftShipper(
                     new DumpLogTrigger(
                         $configuration['mailer']['debug']['log_file_path'],

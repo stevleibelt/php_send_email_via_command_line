@@ -1,5 +1,10 @@
 # Send Mail Via Command Line
 
+This free as in freedom command line tool to easy up sending mails from the command line.
+Thanks to [Swiftmailer](https://swiftmailer.symfony.com/). This is just a command line frontend using the great swiftmailer.
+
+The current change log can be found [here](CHANGELOGi.md).
+
 ## Usage
 
 ```
@@ -62,44 +67,3 @@ cp configuration/local.dist.php configuration/local.php
 #adapt it to your needs
 vim configuration/local.php
 ```
-
-# Links
-
-# History
-
-* upcomming
-    * @todo
-        * add flag "--add-sender-to-bcc" or "--send-it-to-me-also"
-        * add "--content-as-text" and "--content-as-html" as optional lists
-        * create install script that does the steps in the "by hand" section
-        * create shell script to do a step by step selection
-        * combine --verbose with EchoLogger
-    * added suggests
-    * fixed license spelling issue
-    * removed unused use statements
-* [1.6.0](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.6.0) - released at 2020-08-04
-    * added logging support (file based logging and cli output)
-* [1.5.0](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.5.0) - released at 2020-08-04
-    * support for `configuration/local.dist.php` and `configuration/local.php` to add capability to modify the supported transporters (currently `sendmail` and `smtp`)
-* [1.4.1](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.4.1) - released at 2020-08-04
-    * fixed missing migration code
-* [1.4.0](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.4.0) - released at 2020-08-04
-    * bumped version of php von 5.3 to 7.2
-    * bumped version of swiftmailer von 5.4 to 6.0
-* [1.3.2](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.3.2) - released at 04.11.2016
-    * fixed issue [--attachment does not work with relative paths](https://github.com/stevleibelt/php_send_email_via_command_line/issues/1)
-* [1.3.1](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.3.1) - released at 18.02.2016
-    * created Builder to easy up switching between different mail libraries
-* [1.3.0](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.3.0) - released at 18.02.2016
-    * created basic domain models and services
-    * move code into small classes (like "ValidateEmail" etc.)
-* [1.2.0](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.2.0) - released at 04.02.2016
-    * added content type detection
-* [1.1.0](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.1.0) - released at 04.02.2016
-    * added "--attachment"
-* [1.0.1](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.0.1) - released at 17.01.2016
-    * added packagist
-    * fixed issue when using optional "--bcc"
-    * made send_mail executable
-* [1.0.0](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.0.0) - released at 16.01.2016
-    * initial release
