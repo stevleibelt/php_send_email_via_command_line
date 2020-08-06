@@ -3,7 +3,7 @@
 This free as in freedom command line tool to easy up sending mails from the command line.
 Thanks to [Swiftmailer](https://swiftmailer.symfony.com/). This is just a command line frontend using the great swiftmailer.
 
-The current change log can be found [here](CHANGELOGi.md).
+The current change log can be found [here](CHANGELOG.md).
 
 ## Usage
 
