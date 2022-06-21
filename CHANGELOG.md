@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### To Add
 
+* add flag "--attachments=" to ease up attaching files by regexp or by providing a directory
+  * `--attachments="0*.jpg"` to attach all files in the current pwd that fits to this regepx
+  * `--attachments="attachment/*"` to attach all files in the provided that fits to this regepx
 * add flag "--add-sender-to-bcc" or "--send-it-to-me-also"
 * add "--content-as-text" and "--content-as-html" as optional lists
 * create install script that does the steps in the "by hand" section
@@ -16,6 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### To Change
 
+* update to php 8.0
 * combine --verbose with EchoLogger (inject environment or $beVerbose to AbstractShipper::ship())
 
 ## [Unreleased]
