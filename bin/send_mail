@@ -1,8 +1,8 @@
 #!/bin/env php
 <?php
 /**
- * @author net_bazzline_create_executable_command_line_file
  * @since 2016-01-11
+ * @author net_bazzline_create_executable_command_line_file
  */
 
 //begin of including composer autoload.php

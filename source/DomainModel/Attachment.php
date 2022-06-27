@@ -9,7 +9,7 @@ use InvalidArgumentException;
 
 final class Attachment
 {
-    /** @var  */
+    /** @var string */
     private $contentType;
 
     /** @var string */

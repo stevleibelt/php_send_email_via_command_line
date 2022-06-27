@@ -18,12 +18,18 @@ use Swift_Plugins_Loggers_EchoLogger;
 use Swift_SendmailTransport;
 use Swift_SmtpTransport;
 use Swift_Transport;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport\SendmailTransport;
+use Symfony\Component\Mailer\Transport\Smtp\SmtpTransport;
 
 class CommandBuilderFactory
 {
     public function create(CommandLineEnvironment  $commandLineEnvironment): CommandBuilder
     {
-        if (class_exists('Swift_Mailer')) {
+        if (class_exists(Mailer::class)) {
+            $configuration = $this->loadConfiguration();
+            $transport = $this->buildTransport($configuration['transporter']);
+        } elseif (class_exists('Swift_Mailer')) {
             $configuration = $this->loadConfiguration();
             $transport = $this->buildTransport($configuration['transporter']);
             $loggerPluginOrNull = $this->buildLoggerPlugin($configuration['mailer']);
@@ -41,7 +47,7 @@ class CommandBuilderFactory
             );
         } else {
             throw new RuntimeException(
-                'could not create a shipper, no need and supported library installed'
+                'Could not create a shipper, no need and supported library installed'
             );
         }
     }
@@ -81,6 +87,15 @@ class CommandBuilderFactory
     private function buildTransport(array $configuration): Swift_Transport
     {
         switch ($configuration['active_transporter_class_name']) {
+            case SendmailTransport::class:
+                $transport = new SendmailTransport(
+                    $configuration['list_of_transporter_to_arguments'][SendmailTransport::class]['command']
+                );
+                break;
+            case SmtpTransport::class:
+                $transport = new SmtpTransport();
+                $transport->setLocalDomain()
+                break;
             case Swift_SendmailTransport::class:
                 $transport  = new Swift_SendmailTransport(
                     $configuration['list_of_transporter_to_arguments'][Swift_SendmailTransport::class]['command']
