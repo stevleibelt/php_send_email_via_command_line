@@ -35,6 +35,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 * Added [migration how to](migration/from_1.7.0_to_2.0.0.md)
 
+### Changed
+
+* Changed from `Swift_Mailer` to `symfony\mailer`
+
 ## [1.7.0](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.7.0) - released at 2020-08-06
 
 ### Added
