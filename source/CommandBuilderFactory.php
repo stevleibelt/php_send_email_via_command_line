@@ -19,6 +19,7 @@ use Swift_SendmailTransport;
 use Swift_SmtpTransport;
 use Swift_Transport;
 use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Transport\SendmailTransport;
 use Symfony\Component\Mailer\Transport\Smtp\SmtpTransport;
 
@@ -92,9 +93,8 @@ class CommandBuilderFactory
                     $configuration['list_of_transporter_to_arguments'][SendmailTransport::class]['command']
                 );
                 break;
-            case SmtpTransport::class:
-                $transport = new SmtpTransport();
-                $transport->setLocalDomain()
+            case Transport::class:
+                $transport = Transport::fromDsn($configuration['list_of_transporter_to_arguments'][Transport::class]['dsn']);
                 break;
             case Swift_SendmailTransport::class:
                 $transport  = new Swift_SendmailTransport(

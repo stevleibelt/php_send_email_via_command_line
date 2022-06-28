@@ -3,3 +3,4 @@ composer.lock
 configuration/local.php
 data/log/*.log
 vendor
+composer.phar

@@ -19,15 +19,23 @@ return [
                 'command'   => '/usr/lib/sendmail -t'
             ],
             Swift_SmtpTransport::class => [
+                //@see: https://manual.uberspace.de/mail-access/
                 'hostname'  => '127.0.0.1',
                 'port'      => 25
             ],
             //----symfony mail
+            //@todo - implement option to configure all by supporting dsn
+            //@see: https://doeken.org/blog/using-symfony-mailer-without-framework
+            \Symfony\Component\Mailer\Transport::class => [
+                //test example
+                'dsn'   => 'null://default'
+                //sendmail example
+                //'dsn'   => 'sendmail://default'
+                //smtp example
+                //'dsn'   => 'smtp://<username>:<password>@<smtp.example.com>:<port>'
+            ],
             \Symfony\Component\Mailer\Transport\SendmailTransport::class => [
                 'command'   => '/usr/lib/sendmail -t'
-            ],
-            Symfony\Component\Mailer\Transport\Smtp\SmtpTransport::class => [
-                'dsn' => 'smtps://127.0.0.1'
             ]
         ]
     ]
