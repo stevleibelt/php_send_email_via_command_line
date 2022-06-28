@@ -16,32 +16,23 @@ use SplFileObject;
 
 final class CommandBuilder
 {
-    /** @var CommandLineEnvironment */
-    private $commandlineEnvironment;
+    private CommandLineEnvironment $commandlineEnvironment;
 
-    /** @var array */
-    private $listOfAttachments;
+    private array $listOfAttachments;
 
-    /** @var array */
-    private $listOfBlindCarbonCopy;
+    private array $listOfBlindCarbonCopy;
 
-    /** @var array */
-    private $listOfCarbonCopy;
+    private array $listOfCarbonCopy;
 
-    /** @var string */
-    private $pathToTheContentFile;
+    private string $pathToTheContentFile;
 
-    /** @var string */
-    private $recipient;
+    private string $recipient;
 
-    /** @var string */
-    private $sender;
+    private string $sender;
 
-    /** @var AbstractShipper */
-    private $shipper;
+    private AbstractShipper $shipper;
 
-    /** @var string */
-    private $subject;
+    private string $subject;
 
     public function __construct(
         CommandLineEnvironment  $commandLineEnvironment,

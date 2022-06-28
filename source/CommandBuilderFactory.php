@@ -5,23 +5,18 @@
  */
 namespace De\Leibelt\SendMail;
 
-use De\Leibelt\SendMail\Service\DumpLogTrigger;
-use De\Leibelt\SendMail\Service\SwiftShipper;
+use De\Leibelt\SendMail\Service\SymfonyMailShipper;
 use InvalidArgumentException;
+use Monolog\Handler\PHPConsoleHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Net\Bazzline\Component\Cli\Environment\CommandLineEnvironment;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use RuntimeException;
-use Swift_Mailer;
-use Swift_Plugins_Logger;
-use Swift_Plugins_LoggerPlugin;
-use Swift_Plugins_Loggers_ArrayLogger;
-use Swift_Plugins_Loggers_EchoLogger;
-use Swift_SendmailTransport;
-use Swift_SmtpTransport;
-use Swift_Transport;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Transport\SendmailTransport;
-use Symfony\Component\Mailer\Transport\Smtp\SmtpTransport;
 
 class CommandBuilderFactory
 {
@@ -30,19 +25,12 @@ class CommandBuilderFactory
         if (class_exists(Mailer::class)) {
             $configuration = $this->loadConfiguration();
             $transport = $this->buildTransport($configuration['transporter']);
-        } elseif (class_exists('Swift_Mailer')) {
-            $configuration = $this->loadConfiguration();
-            $transport = $this->buildTransport($configuration['transporter']);
-            $loggerPluginOrNull = $this->buildLoggerPlugin($configuration['mailer']);
-            $mailer = $this->buildMailer($transport, $loggerPluginOrNull); //@todo
+            $logger = $this->buildLogger($configuration['mailer']['debug']);
+            $mailer = $this->buildMailer($transport, $logger); //@todo
 
             return new CommandBuilder(
                 $commandLineEnvironment,
-                new SwiftShipper(
-                    new DumpLogTrigger(
-                        $configuration['mailer']['debug']['log_file_path'],
-                        $loggerPluginOrNull
-                    ),
+                new SymfonyMailShipper(
                     $mailer
                 )
             );
@@ -53,39 +41,46 @@ class CommandBuilderFactory
         }
     }
 
-    private function buildLoggerPlugin(array $configuration):?Swift_Plugins_Logger
+    private function buildLogger(array $configuration): LoggerInterface
     {
-        $loggerOrNull = null;
+        if ($configuration['enabled'] === true) {
+            $logger = new Logger('php_send_email');
 
-        if ($configuration['debug']['enabled'] === true) {
-            if ($configuration['debug']['log_to_file']) {
-                $loggerOrNull = new Swift_Plugins_Loggers_ArrayLogger(100);
+            if ($configuration['log_to_file']) {
+                $logger->pushHandler(
+                    new StreamHandler(
+                        $configuration['log_file_path'],
+                        $configuration['log_level']
+                    )
+                );
             } else {
-                $loggerOrNull = new Swift_Plugins_Loggers_EchoLogger(false);
+                $logger->pushHandler(
+                    new PHPConsoleHandler(
+                        [],
+                        null,
+                        $configuration['log_level']
+                    )
+                );
             }
+        } else {
+            $logger = new NullLogger();
         }
 
-        return $loggerOrNull;
+        return $logger;
     }
 
     private function buildMailer(
-        Swift_Transport $transport,
-        ?Swift_Plugins_Logger $loggerOrNull
-    ): Swift_Mailer {
-        $mailer = new Swift_Mailer($transport);
+        Transport\TransportInterface $transport,
+        LoggerInterface $logger
+    ): Mailer {
+        $mailer = new Mailer($transport);
 
-        if ($loggerOrNull instanceof Swift_Plugins_Logger) {
-            $mailer->registerPlugin(
-                new Swift_Plugins_LoggerPlugin(
-                    $loggerOrNull
-                )
-            );
-        }
+        //@todo implement usage of logger
 
         return $mailer;
     }
 
-    private function buildTransport(array $configuration): Transport
+    private function buildTransport(array $configuration): Transport\TransportInterface
     {
         switch ($configuration['active_transporter_class_name']) {
             case SendmailTransport::class:
