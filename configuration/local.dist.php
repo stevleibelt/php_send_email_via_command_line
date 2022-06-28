@@ -12,17 +12,9 @@ return [
     ],
     'transporter'   => [
         //set the active transporter
-        'active_transporter_class_name'     => Swift_SmtpTransport::class,
+        'active_transporter_class_name'     => \Symfony\Component\Mailer\Transport::class,
         //this are all supported arguments or optional settings for all supported transporters
         'list_of_transporter_to_arguments'  => [
-            Swift_SendmailTransport::class => [
-                'command'   => '/usr/lib/sendmail -t'
-            ],
-            Swift_SmtpTransport::class => [
-                //@see: https://manual.uberspace.de/mail-access/
-                'hostname'  => '127.0.0.1',
-                'port'      => 25
-            ],
             //----symfony mail
             //@todo - implement option to configure all by supporting dsn
             //@see: https://doeken.org/blog/using-symfony-mailer-without-framework

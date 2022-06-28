@@ -34,7 +34,7 @@ class CommandBuilderFactory
             $configuration = $this->loadConfiguration();
             $transport = $this->buildTransport($configuration['transporter']);
             $loggerPluginOrNull = $this->buildLoggerPlugin($configuration['mailer']);
-            $mailer = $this->buildMailer($transport, $loggerPluginOrNull);
+            $mailer = $this->buildMailer($transport, $loggerPluginOrNull); //@todo
 
             return new CommandBuilder(
                 $commandLineEnvironment,
@@ -85,7 +85,7 @@ class CommandBuilderFactory
         return $mailer;
     }
 
-    private function buildTransport(array $configuration): Swift_Transport
+    private function buildTransport(array $configuration): Transport
     {
         switch ($configuration['active_transporter_class_name']) {
             case SendmailTransport::class:
@@ -96,21 +96,10 @@ class CommandBuilderFactory
             case Transport::class:
                 $transport = Transport::fromDsn($configuration['list_of_transporter_to_arguments'][Transport::class]['dsn']);
                 break;
-            case Swift_SendmailTransport::class:
-                $transport  = new Swift_SendmailTransport(
-                    $configuration['list_of_transporter_to_arguments'][Swift_SendmailTransport::class]['command']
-                );
-                break;
-            case Swift_SmtpTransport::class:
-                $transport  = new Swift_SmtpTransport(
-                    $configuration['list_of_transporter_to_arguments'][Swift_SmtpTransport::class]['hostname'],
-                    $configuration['list_of_transporter_to_arguments'][Swift_SmtpTransport::class]['port']
-                );
-                break;
             default:
                 throw new InvalidArgumentException(
                     sprintf(
-                        '[%s]: unsupported swift transporter.', __METHOD__
+                        '[%s]: unsupported transporter.', __METHOD__
                     )
                 );
         }
