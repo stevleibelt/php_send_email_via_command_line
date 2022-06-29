@@ -17,7 +17,8 @@
         "net_bazzline/php_component_toolbox": "^1.8",
         "php": ">=7.4",
         "symfony/mailer": "5.4.x-dev",
-        "monolog/monolog": "2.x-dev"
+        "monolog/monolog": "2.x-dev",
+        "php-console/php-console": "dev-master"
     },
     "type": "library",
     "autoload": {
