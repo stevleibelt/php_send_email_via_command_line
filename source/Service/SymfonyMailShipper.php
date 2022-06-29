@@ -49,12 +49,21 @@ class SymfonyMailShipper extends AbstractShipper
             $email->text($mail->content());
         }
 
+        $this->logger->debug(
+            'Adding mandatory values.',
+            [
+                'from'      => $mail->from(),
+                'subject'   => $mail->subject(),
+                'to'        => $mail->to()
+            ]
+        );
         $email->from($mail->from());
         $email->subject($mail->subject());
         $email->to($mail->to());
 
         try {
             $this->mailer->send($email);;
+            $this->logger->info('Mail send was successful.');
         } catch (TransportExceptionInterface $exception) {
             $this->logger->error(
                 $exception->getMessage(),
