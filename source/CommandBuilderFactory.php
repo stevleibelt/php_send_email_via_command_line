@@ -12,6 +12,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Net\Bazzline\Component\Cli\Environment\CommandLineEnvironment;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Psr\Log\NullLogger;
 use RuntimeException;
 use Symfony\Component\Mailer\Mailer;
@@ -56,10 +57,9 @@ class CommandBuilderFactory
                 );
             } else {
                 $logger->pushHandler(
-                    new PHPConsoleHandler(
-                        [],
-                        null,
-                        $configuration['log_level']
+                    new StreamHandler(
+                        'php://stdout',
+                        LogLevel::DEBUG
                     )
                 );
             }
