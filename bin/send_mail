@@ -73,7 +73,7 @@ $environment->execute(
 
         //begin of business logic
         $factory        = new CommandBuilderFactory();
-        $builder        = $factory->create();
+        $builder        = $factory->create($environment);
 
         $builder->start()
             ->withPathToTheContentFile($filePath)
