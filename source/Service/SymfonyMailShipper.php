@@ -4,26 +4,26 @@ namespace De\Leibelt\SendMail\Service;
 
 use De\Leibelt\SendMail\DomainModel\AbstractMail;
 use De\Leibelt\SendMail\DomainModel\HtmlMail;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
 
 class SymfonyMailShipper extends AbstractShipper
 {
-    /** @var Mailer */
-    private $mailer;
+    private LoggerInterface  $logger;
+
+    private Mailer $mailer;
 
     public function __construct(
+        LoggerInterface  $logger,
         Mailer  $symfonyMailer
     ) {
-        $this->mailer    = $symfonyMailer;
+        $this->logger   = $logger;
+        $this->mailer   = $symfonyMailer;
     }
 
-    /**
-     * @param AbstractMail $mail
-     * @return void
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
-     */
-    public function ship(AbstractMail $mail)
+    public function ship(AbstractMail $mail): void
     {
         $email = new Email();
 
@@ -53,6 +53,16 @@ class SymfonyMailShipper extends AbstractShipper
         $email->subject($mail->subject());
         $email->to($mail->to());
 
-        $this->mailer->send($email);;
+        try {
+            $this->mailer->send($email);;
+        } catch (TransportExceptionInterface $exception) {
+            $this->logger->error(
+                $exception->getMessage(),
+                [
+                    'debug'             => $exception->getDebug(),
+                    'trace_as_string'   => $exception->getTraceAsString()
+                ]
+            );
+        }
     }
 }

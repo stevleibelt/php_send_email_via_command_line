@@ -26,11 +26,12 @@ class CommandBuilderFactory
             $configuration = $this->loadConfiguration();
             $transport = $this->buildTransport($configuration['transporter']);
             $logger = $this->buildLogger($configuration['mailer']['debug']);
-            $mailer = $this->buildMailer($transport, $logger); //@todo
+            $mailer = new Mailer($transport);
 
             return new CommandBuilder(
                 $commandLineEnvironment,
                 new SymfonyMailShipper(
+                    $logger,
                     $mailer
                 )
             );
@@ -67,17 +68,6 @@ class CommandBuilderFactory
         }
 
         return $logger;
-    }
-
-    private function buildMailer(
-        Transport\TransportInterface $transport,
-        LoggerInterface $logger
-    ): Mailer {
-        $mailer = new Mailer($transport);
-
-        //@todo implement usage of logger
-
-        return $mailer;
     }
 
     private function buildTransport(array $configuration): Transport\TransportInterface

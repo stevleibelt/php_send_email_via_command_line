@@ -10,11 +10,9 @@ use De\Leibelt\SendMail\Service\AbstractShipper;
 
 final class Command
 {
-    /** @var AbstractMail */
-    private $mail;
+    private AbstractMail  $mail;
 
-    /** @var AbstractShipper */
-    private $shipper;
+    private AbstractShipper  $shipper;
 
     public function __construct(
         AbstractMail $mail,
