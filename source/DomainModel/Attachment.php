@@ -9,26 +9,19 @@ use InvalidArgumentException;
 
 final class Attachment
 {
-    /** @var string */
-    private $contentType;
+    private ?string $contentType;
 
-    /** @var string */
-    private $name;
+    private string $name;
 
-    /** @var string */
-    private $path;
+    private string $path;
 
     /**
-     * Attachment constructor.
-     * @param string $name
-     * @param string $path
-     * @param string $contentType
      * @throws InvalidArgumentException
      */
     public function __construct(
         string $name,
         string $path,
-        string $contentType
+        string $contentType = null
     ) {
         $this->contentType  = $contentType;
         $this->name         = $name;
