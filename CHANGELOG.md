@@ -17,10 +17,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * Create install script that does the steps in the "by hand" section
 * Create shell script to do a step by step selection
 * Implement [event dispatching](https://doeken.org/blog/using-symfony-mailer-without-framework)
+* Setup [travisci](https://docs.travis-ci.com/user/languages/php/) (start adding unittests)
+  * Or use [githubactions](https://freek.dev/1853-moving-php-and-laravel-tests-from-travis-ci-to-github-actions) since it looks like travisci is dead for open source
 
 ### To Change
 
-* Update to php 8.0
 * Combine --verbose with EchoLogger (inject environment or $beVerbose to AbstractShipper::ship())
 
 ## [Unreleased]
@@ -34,6 +35,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 * Added [migration how to](migration/from_1.7.0_to_2.0.0.md)
+* Added support for php 8.0
 
 ### Changed
 
