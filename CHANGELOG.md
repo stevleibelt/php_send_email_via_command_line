@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * Implement [event dispatching](https://doeken.org/blog/using-symfony-mailer-without-framework)
 * Setup [travisci](https://docs.travis-ci.com/user/languages/php/) (start adding unittests)
   * Or use [githubactions](https://freek.dev/1853-moving-php-and-laravel-tests-from-travis-ci-to-github-actions) since it looks like travisci is dead for open source
+  * See [monolog/.github/workflows](https://github.com/Seldaek/monolog/tree/main/.github/workflows) as example
 
 ### To Change
 
