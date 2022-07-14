@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 * Added [migration how to](migration/from_1.7.0_to_2.0.0.md)
+* Added [github actions](.github/workflow/ci.yml)
 * Added support for php 8.0
 
 ### Changed
