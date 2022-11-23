@@ -19,7 +19,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### To Change
 
-* update to php 8.0
 * combine --verbose with EchoLogger (inject environment or $beVerbose to AbstractShipper::ship())
 
 ## [Unreleased]
@@ -27,6 +26,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Changed
+
+## [1.8.0](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.8.0) - released at 2020-11-23
+
+### Changed
+
+* Updated to php 8.0
 
 ## [1.7.0](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.7.0) - released at 2020-08-06
 
