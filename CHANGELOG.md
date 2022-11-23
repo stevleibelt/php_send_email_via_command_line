@@ -27,6 +27,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
+## [1.8.2](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.8.2) - released at 2020-11-23
+
+### Changed
+
+* Updated dependencies
+
 ## [1.8.1](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.8.1) - released at 2020-11-23
 
 ### Changed
