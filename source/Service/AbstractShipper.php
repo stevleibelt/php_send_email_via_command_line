@@ -6,7 +6,6 @@
 namespace De\Leibelt\SendMail\Service;
 
 use De\Leibelt\SendMail\DomainModel\AbstractMail;
-use De\Leibelt\SendMail\DomainModel\Configuration;
 
 abstract class AbstractShipper
 {

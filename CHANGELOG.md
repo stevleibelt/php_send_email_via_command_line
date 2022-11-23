@@ -27,6 +27,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
+## [1.8.1](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.8.1) - released at 2020-11-23
+
+### Changed
+
+* Fixed error >>PHP Fatal error:  Uncaught ArgumentCountError: Too few arguments to function De\Leibelt\SendMail\CommandBuilderFactory::create(), 0 passed<<
+
 ## [1.8.0](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.8.0) - released at 2020-11-23
 
 ### Changed

@@ -10,25 +10,15 @@ use InvalidArgumentException;
 abstract class AbstractMail
 {
     /** @var array|Attachment[] */
-    private $attachments;
-
+    private array $attachments;
     /** @var array|Address[] */
-    private $bccs;
-
+    private array $bccs;
     /** @var array|Address[] */
-    private $ccs;
-
-    /** @var string */
-    private $content;
-
-    /** @var Address */
-    private $from;
-
-    /** @var string */
-    private $subject;
-
-    /** @var Address */
-    private $to;
+    private array $ccs;
+    private string $content;
+    private Address $from;
+    private string $subject;
+    private Address $to;
 
     /**
      * AbstractMail constructor.
@@ -54,9 +44,9 @@ abstract class AbstractMail
         $this->bccs         = $bccs;
         $this->ccs          = $ccs;
         $this->content      = $content;
-        $this->from         = $from;
+        $this->from         = new Address($from);
         $this->subject      = $subject;
-        $this->to           = $to;
+        $this->to           = new Address($to);
 
         if (strlen($subject) < 1) {
             throw new InvalidArgumentException(

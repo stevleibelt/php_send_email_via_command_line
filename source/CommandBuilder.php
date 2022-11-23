@@ -16,32 +16,15 @@ use SplFileObject;
 
 final class CommandBuilder
 {
-    /** @var CommandLineEnvironment */
-    private $commandlineEnvironment;
-
-    /** @var array */
-    private $listOfAttachments;
-
-    /** @var array */
-    private $listOfBlindCarbonCopy;
-
-    /** @var array */
-    private $listOfCarbonCopy;
-
-    /** @var string */
-    private $pathToTheContentFile;
-
-    /** @var string */
-    private $recipient;
-
-    /** @var string */
-    private $sender;
-
-    /** @var AbstractShipper */
-    private $shipper;
-
-    /** @var string */
-    private $subject;
+    private CommandLineEnvironment $commandlineEnvironment;
+    private array $listOfAttachments;
+    private array $listOfBlindCarbonCopy;
+    private array $listOfCarbonCopy;
+    private string $pathToTheContentFile;
+    private string $recipient;
+    private string $sender;
+    private AbstractShipper $shipper;
+    private string $subject;
 
     public function __construct(
         CommandLineEnvironment  $commandLineEnvironment,
@@ -195,7 +178,7 @@ final class CommandBuilder
         return new Command($mail, $shipper);
     }
 
-    private function reset()
+    private function reset(): void
     {
         $this->listOfAttachments        = [];
         $this->listOfBlindCarbonCopy    = [];

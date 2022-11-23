@@ -6,21 +6,16 @@
 namespace De\Leibelt\SendMail\Service;
 
 use De\Leibelt\SendMail\DomainModel\AbstractMail;
-use De\Leibelt\SendMail\DomainModel\Configuration;
 use De\Leibelt\SendMail\DomainModel\HtmlMail;
 use Swift_Attachment;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_SendmailTransport;
-use Swift_SmtpTransport;
 
 class SwiftShipper extends AbstractShipper
 {
-    /** @var DumpLogTrigger */
-    private $dumpLogTrigger;
-
-    /** @var Swift_Mailer */
-    private $mailer;
+    private DumpLogTrigger $dumpLogTrigger;
+    private Swift_Mailer $mailer;
 
     public function __construct(
         DumpLogTrigger $dumpLogTrigger,
@@ -31,12 +26,9 @@ class SwiftShipper extends AbstractShipper
     }
 
 
-    /**
-     * @param AbstractMail $mail
-     * @see: http://swiftmailer.org/docs/messages.html
-     */
-    public function ship(AbstractMail $mail)
+    public function ship(AbstractMail $mail): void
     {
+        // @see http://swiftmailer.org/docs/messages.html
         $message = new Swift_Message();
 
         foreach ($mail->attachments() as $attachment) {
@@ -63,16 +55,36 @@ class SwiftShipper extends AbstractShipper
         }
 
         $message->setBody($mail->content());
-        $message->setTo(
-            [
-                $mail->to()
-            ]
-        );
-        $message->setFrom(
-            [
-                $mail->from()
-            ]
-        );
+
+        if ($mail->to()->hasName()) {
+            $message->setTo(
+                [
+                    $mail->to()->address(),
+                    $mail->to()->name()
+                ]
+            );
+        } else {
+            $message->setTo(
+                [
+                    $mail->to()->address()
+                ]
+            );
+        }
+
+        if ($mail->to()->hasName()) {
+            $message->setFrom(
+                [
+                    $mail->from()->address(),
+                    $mail->from()->name()
+                ]
+            );
+        } else {
+            $message->setFrom(
+                [
+                    $mail->from()->address()
+                ]
+            );
+        }
         $message->setSubject($mail->subject());
 
         $this->mailer->send($message);

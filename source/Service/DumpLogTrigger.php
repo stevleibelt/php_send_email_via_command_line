@@ -7,17 +7,9 @@ use Swift_Plugins_Loggers_ArrayLogger;
 
 final class DumpLogTrigger
 {
-    /** @var null|string */
-    private $filePathToLogOrNull;
+    private null|string $filePathToLogOrNull;
+    private null|Swift_Plugins_Logger $swiftLogger;
 
-    /** @var null|Swift_Plugins_Logger */
-    private $swiftLogger;
-
-    /**
-     * Logger constructor.
-     * @param string|null $filePathToLogOrNull
-     * @param Swift_Plugins_Logger|null $swiftLogger
-     */
     public function __construct(
         ?string $filePathToLogOrNull,
         ?Swift_Plugins_Logger $swiftLogger
@@ -26,12 +18,12 @@ final class DumpLogTrigger
         $this->swiftLogger          = $swiftLogger;
     }
 
-    public function triggerLoggerDump()
+    public function triggerLoggerDump(): void
     {
         //buzz me if you don't like this variable name
         $dumpItLikeItsHot = (
             ($this->swiftLogger instanceof Swift_Plugins_Loggers_ArrayLogger)
-            && (count($this->swiftLogger->dump()) > 0)
+            && (strlen($this->swiftLogger->dump()) > 0)
         );
 
         if ($dumpItLikeItsHot) {

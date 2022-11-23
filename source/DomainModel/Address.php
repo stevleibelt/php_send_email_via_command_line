@@ -9,11 +9,8 @@ use InvalidArgumentException;
 
 final class Address
 {
-    /** @var string */
-    private $address;
-
-    /** @var null|string */
-    private $name;
+    private string $address;
+    private null|string $name;
 
     /**
      * Address constructor.
@@ -38,5 +35,10 @@ final class Address
     public function name(): ?string
     {
         return $this->name;
+    }
+
+    public function hasName(): bool
+    {
+        return (!is_null($this->name));
     }
 }

@@ -9,14 +9,9 @@ use InvalidArgumentException;
 
 final class Attachment
 {
-    /** @var  */
-    private $contentType;
-
-    /** @var string */
-    private $name;
-
-    /** @var string */
-    private $path;
+    private string $contentType;
+    private string $name;
+    private string $path;
 
     /**
      * Attachment constructor.

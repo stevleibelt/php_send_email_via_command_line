@@ -10,11 +10,8 @@ use De\Leibelt\SendMail\Service\AbstractShipper;
 
 final class Command
 {
-    /** @var AbstractMail */
-    private $mail;
-
-    /** @var AbstractShipper */
-    private $shipper;
+    private AbstractMail $mail;
+    private AbstractShipper $shipper;
 
     public function __construct(
         AbstractMail $mail,
@@ -24,7 +21,7 @@ final class Command
         $this->shipper  = $shipper;
     }
 
-    public function execute()
+    public function execute(): void
     {
         $this->shipper->ship($this->mail);
     }
