@@ -115,6 +115,9 @@ final class CommandBuilder
                     case 'jpg':
                         $contentType = 'image/jpeg';
                         break;
+                    case 'png':
+                        $contentType = 'image/png';
+                        break;
                     case 'pdf':
                         $contentType = 'application/pdf';
                         break;
