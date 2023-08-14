@@ -84,26 +84,17 @@ abstract class AbstractMail
         return $this->content;
     }
 
-    /**
-     * @return Address|string
-     */
-    public function from()
+    public function from(): string|Address
     {
         return $this->from;
     }
 
-    /**
-     * @return string
-     */
-    public function subject()
+    public function subject(): string
     {
         return $this->subject;
     }
 
-    /**
-     * @return Address|string
-     */
-    public function to()
+    public function to(): string|Address
     {
         return $this->to;
     }
