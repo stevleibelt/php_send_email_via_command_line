@@ -25,7 +25,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+* [Added support for png images](https://github.com/stevleibelt/php_send_email_via_command_line/issues/7
+
 ### Changed
+
+* [Fixed issue when unsupported attachment content type was added](https://github.com/stevleibelt/php_send_email_via_command_line/issues/7)
+  * [Attachment](source/DomainModel/Attachment.php) now supports `contentType = null`
 
 ## [1.8.2](https://github.com/stevleibelt/php_send_email_via_command_line/tree/1.8.2) - released at 2020-11-23
 
